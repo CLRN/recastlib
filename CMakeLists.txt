@@ -38,5 +38,6 @@ ${PROJECT_SOURCE_DIR}/python/detour.cpp
 ${PROJECT_SOURCE_DIR}/python/dtmath.cpp
 ${PROJECT_SOURCE_DIR}/python/loader.cpp
 ${PROJECT_SOURCE_DIR}/python/export.cpp
+${PROJECT_SOURCE_DIR}/python/mmap.cpp
 )
 

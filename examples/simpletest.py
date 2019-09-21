@@ -5,7 +5,7 @@ u"""
  @author: zl
 """
 
-import recast as dt
+import _recast as dt
 
 
 def test_sample_tile_mesh():

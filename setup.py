@@ -52,10 +52,11 @@ def main():
         'Recast/Recast/Include',
         'python',
         ]
-    if sys.version_info[0] == 3:
-        libraries += ['boost_python3']
-    else:
-        libraries += ['boost_python']
+    if os.name != "nt":
+        if sys.version_info[0] == 3:
+            libraries += ['boost_python3']
+        else:
+            libraries += ['boost_python']
     include_dirs += env.boost_include
     library_dirs += env.boost_library_path
     sources += findcxx('Recast/Detour')

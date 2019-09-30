@@ -1,4 +1,4 @@
-#include "config.h"
+#include "DetourAssert.h"
 
 #define BOOST_PYTHON_STATIC_LIB
 #include <boost/python.hpp>

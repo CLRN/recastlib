@@ -58,8 +58,8 @@ namespace MMAP
         g_MMapManager = new MMapManager(dir);
     }
 
-    MMapManager &MMapFactory::manager() {
-        return *g_MMapManager;;
+    MMapManager* MMapFactory::manager() {
+        return g_MMapManager;;
     }
 
     // ######################## MMapManager ########################
@@ -277,7 +277,7 @@ namespace MMAP
         return false;
     }
 
-    bool MMapManager::unloadMap(uint32_t mapId)
+    bool MMapManager::unloadMapTiles(uint32_t mapId)
     {
         MMapDataSet::iterator itr = loadedMMaps.find(mapId);
         if (itr == loadedMMaps.end() || !itr->second)
@@ -345,8 +345,9 @@ namespace MMAP
         return itr->second->navMesh;
     }
 
-    dtNavMeshQuery const* MMapManager::GetNavMeshQuery(uint32_t mapId, uint32_t instanceId)
+    dtNavMeshQuery const* MMapManager::GetNavMeshQuery(uint32_t mapId)
     {
+        uint32_t instanceId = 0;
         MMapDataSet::const_iterator itr = GetMMapData(mapId);
         if (itr == loadedMMaps.end())
             return nullptr;

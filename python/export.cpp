@@ -9,6 +9,7 @@
 extern void export_math();
 extern void export_detour();
 extern void export_loader();
+extern void export_mmaps();
 
 
 BOOST_PYTHON_MODULE(_recast)
@@ -16,4 +17,5 @@ BOOST_PYTHON_MODULE(_recast)
 	export_math();
 	export_detour();
 	export_loader();
+    export_mmaps();
 }

@@ -47,11 +47,11 @@ namespace MMAP
             void InitializeThreadUnsafe(const std::vector<uint32_t>& mapIds);
             bool loadMap(uint32_t mapId, uint32_t x, uint32_t y);
             bool unloadMap(uint32_t mapId, int32_t x, int32_t y);
-            bool unloadMap(uint32_t mapId);
+            bool unloadMapTiles(uint32_t mapId);
             bool unloadMapInstance(uint32_t mapId, uint32_t instanceId);
 
             // the returned [dtNavMeshQuery const*] is NOT threadsafe
-            dtNavMeshQuery const* GetNavMeshQuery(uint32_t mapId, uint32_t instanceId = 0);
+            dtNavMeshQuery const* GetNavMeshQuery(uint32_t mapId);
             dtNavMesh const* GetNavMesh(uint32_t mapId);
 
             uint32_t getLoadedTilesCount() const { return loadedTiles; }
@@ -74,7 +74,7 @@ namespace MMAP
     {
     public:
         static void createManager(const std::string& dir);
-        static MMapManager& manager();
+        static MMapManager* manager();
         static void clear();
     };
 }

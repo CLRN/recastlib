@@ -1,7 +1,9 @@
 import os
 import sys
 from distutils.core import setup, Extension
-import env
+import importlib
+
+env = importlib.import_module(f"{os.name}_env")
 
 libext_name = '_recast'
 

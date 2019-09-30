@@ -55,16 +55,17 @@ namespace MMAP
     class MMapManager
     {
         public:
-            MMapManager() : loadedTiles(0) {}
+            MMapManager(const std::string& dir) : loadedTiles(0), dataDir(dir) {}
             ~MMapManager();
 
             bool loadMap(uint32_t mapId, int32_t x, int32_t y);
             bool unloadMap(uint32_t mapId, int32_t x, int32_t y);
             bool unloadMap(uint32_t mapId);
             bool unloadMapInstance(uint32_t mapId, uint32_t instanceId);
+            bool loadMapAndAllTiles(uint32_t mapId);
 
             // the returned [dtNavMeshQuery const*] is NOT threadsafe
-            dtNavMeshQuery const* GetNavMeshQuery(uint32_t mapId, uint32_t instanceId);
+            dtNavMeshQuery const* GetNavMeshQuery(uint32_t mapId, uint32_t instanceId = 0);
             dtNavMesh const* GetNavMesh(uint32_t mapId);
 
             uint32_t getLoadedTilesCount() const { return loadedTiles; }
@@ -75,6 +76,7 @@ namespace MMAP
 
             MMapDataSet loadedMMaps;
             uint32_t loadedTiles;
+            const std::string dataDir;
     };
 
     // static class
@@ -83,11 +85,8 @@ namespace MMAP
     class MMapFactory
     {
         public:
-            static MMapManager* createOrGetMMapManager();
+            static void createManager(const std::string& dir);
+            static MMapManager& manager();
             static void clear();
-            static void preventPathfindingOnMaps(const char* ignoreMapIds);
-            static bool IsPathfindingEnabled(uint32_t mapId, const Unit* unit);
-            static bool IsPathfindingForceEnabled(const Unit* unit);
-            static bool IsPathfindingForceDisabled(const Unit* unit);
     };
 }

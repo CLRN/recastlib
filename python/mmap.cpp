@@ -4,24 +4,26 @@
 
 #include <set>
 #include <cstring>
+#include <iostream>
+
+#include <boost/filesystem.hpp>
 
 namespace MMAP
 {
-    std::string GetDataPath()
-    {
-        return ".";
-    }
-
     template<typename... Args>
     void outError(const char* text, Args... args)
     {
-        std::fprintf(stderr, text, args...);
+        char buffer[4096] = {};
+        std::sprintf(buffer, text, args...);
+        std::cerr << buffer << std::endl;
     }
 
     template<typename... Args>
     void outInfo(const char* text, Args... args)
     {
-        std::fprintf(stderr, text, args...);
+        char buffer[4096] = {};
+        std::sprintf(buffer, text, args...);
+        std::cerr << buffer << std::endl;
     }
 
     // ######################## MMapFactory ########################
@@ -31,33 +33,6 @@ namespace MMAP
     // stores list of mapids which do not use pathfinding
     std::set<uint32_t>* g_mmapDisabledIds = NULL;
 
-    MMapManager* MMapFactory::createOrGetMMapManager()
-    {
-        if (g_MMapManager == NULL)
-            { g_MMapManager = new MMapManager(); }
-
-        return g_MMapManager;
-    }
-
-    void MMapFactory::preventPathfindingOnMaps(const char* ignoreMapIds)
-    {
-        if (!g_mmapDisabledIds)
-            { g_mmapDisabledIds = new std::set<uint32_t>(); }
-
-        uint32_t strLenght = strlen(ignoreMapIds) + 1;
-        char* mapList = new char[strLenght];
-        memcpy(mapList, ignoreMapIds, sizeof(char)*strLenght);
-
-        char* idstr = strtok(mapList, ",");
-        while (idstr)
-        {
-            g_mmapDisabledIds->insert(uint32_t(atoi(idstr)));
-            idstr = strtok(NULL, ",");
-        }
-
-        delete[] mapList;
-    }
-
     void MMapFactory::clear()
     {
         delete g_mmapDisabledIds;
@@ -65,6 +40,14 @@ namespace MMAP
 
         g_mmapDisabledIds = NULL;
         g_MMapManager = NULL;
+    }
+
+    void MMapFactory::createManager(const std::string &dir) {
+        g_MMapManager = new MMapManager(dir);
+    }
+
+    MMapManager &MMapFactory::manager() {
+        return *g_MMapManager;;
     }
 
     // ######################## MMapManager ########################
@@ -85,7 +68,7 @@ namespace MMAP
 
         // load and init dtNavMesh - read parameters from file
         char fileName[4096] = {};
-        snprintf(fileName, sizeof(fileName), (GetDataPath() + "mmaps/%03i.mmap").c_str(), mapId);
+        snprintf(fileName, sizeof(fileName), (dataDir + "mmaps/%03i.mmap").c_str(), mapId);
 
         FILE* file = fopen(fileName, "rb");
         if (!file)
@@ -149,7 +132,7 @@ namespace MMAP
 
         // load this tile :: mmaps/MMMXXYY.mmtile
         char fileName[4096] = {};
-        snprintf(fileName, sizeof(fileName), (GetDataPath() + "mmaps/%03i%02i%02i.mmtile").c_str(), mapId, x, y);
+        snprintf(fileName, sizeof(fileName), (dataDir + "mmaps/%03i%02i%02i.mmtile").c_str(), mapId, x, y);
 
         FILE* file = fopen(fileName, "rb");
         if (!file)
@@ -349,5 +332,24 @@ namespace MMAP
         }
 
         return mmap->navMeshQueries[instanceId];
+    }
+
+    bool MMapManager::loadMapAndAllTiles(uint32_t mapId)
+    {
+        boost::filesystem::directory_iterator it{dataDir + "/mmaps"};
+        boost::filesystem::directory_iterator end;
+
+        for (; it != end; ++it)
+        {
+            const auto name = it->path().filename().string();
+            if (it->path().extension() != ".mmtile" || atoi(name.substr(0, 3).c_str()) != mapId)
+                continue;
+
+            uint32_t x = atoi(name.substr(3, 2).c_str());
+            uint32_t y = atoi(name.substr(5, 2).c_str());
+            if (!loadMap(mapId, x, y))
+                return false;
+        }
+        return true;
     }
 }

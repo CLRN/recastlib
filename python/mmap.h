@@ -66,15 +66,4 @@ namespace MMAP
             bool thread_safe_environment;
             const std::string dataDir;
     };
-
-    // static class
-    // holds all mmap global data
-    // access point to MMapManager singelton
-    class MMapFactory
-    {
-    public:
-        static void createManager(const std::string& dir);
-        static MMapManager* manager();
-        static void clear();
-    };
 }

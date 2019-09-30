@@ -2,7 +2,6 @@
 #include "config.h"
 #include "mmap.h"
 
-
 void export_mmaps()
 {
     using namespace boost::python;
@@ -12,9 +11,4 @@ void export_mmaps()
             .def("unload", &MMAP::MMapManager::unloadMap)
             .def("mesh", &MMAP::MMapManager::GetNavMesh,
                  return_value_policy<reference_existing_object>());
-
-    class_<MMAP::MMapFactory>("MMapFactory")
-            .def("create", &MMAP::MMapFactory::createManager)
-            .def("get", &MMAP::MMapFactory::manager,
-                    return_value_policy<reference_existing_object>());
 }

@@ -35,5 +35,3 @@ add_library (_recast SHARED
 
 target_link_libraries(_recast ${Python_LIBRARY} Boost::python3 Boost::filesystem)
 
-add_executable(test_load test/main.cpp)
-target_link_libraries(test_load _recast)

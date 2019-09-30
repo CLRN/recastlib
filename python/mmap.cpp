@@ -43,25 +43,6 @@ namespace MMAP
         std::cerr << buffer << std::endl;
     }
 
-    // ######################## MMapFactory ########################
-    // our global singelton copy
-    MMapManager* g_MMapManager = NULL;
-
-    void MMapFactory::clear()
-    {
-        delete g_MMapManager;
-
-        g_MMapManager = NULL;
-    }
-
-    void MMapFactory::createManager(const std::string &dir) {
-        g_MMapManager = new MMapManager(dir);
-    }
-
-    MMapManager* MMapFactory::manager() {
-        return g_MMapManager;;
-    }
-
     // ######################## MMapManager ########################
     MMapManager::~MMapManager()
     {

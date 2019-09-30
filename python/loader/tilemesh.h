@@ -52,7 +52,12 @@ inline void dtSwapEndian(NavMeshSetHeader* h)
 
 inline void dtSwapEndian(NavMeshTileHeader* h)
 {
-	dtSwapEndian(&h->tileRef);
+    unsigned char* x = (unsigned char*)&h->tileRef;
+    dtSwapByte(x+0, x+7);
+    dtSwapByte(x+1, x+6);
+    dtSwapByte(x+2, x+5);
+    dtSwapByte(x+3, x+4);
+
 	dtSwapEndian(&h->dataSize);
 }
 

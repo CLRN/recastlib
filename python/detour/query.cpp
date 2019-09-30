@@ -477,8 +477,9 @@ dtResultV dtNavMeshQueryWraper::closestPointOnPoly(dtPolyRef ref, dtVec3 pos) co
 {
 	dtVec3 closest;
 
+	bool posOver = false;
 	dtStatus status = navq_->closestPointOnPoly(ref,
-			typecast(pos), typecast(closest));
+			typecast(pos), typecast(closest), &posOver);
 
 	return dtResultV(status, closest);
 }

@@ -1,4 +1,3 @@
-#include "mmap_export.h"
 #include "config.h"
 #include "mmap.h"
 

@@ -132,6 +132,8 @@ public:
 
 	dtResultF getPolyHeight(dtPolyRef ref, dtVec3 pos) const;
 
+    dtResult smoothPath(dtVec3 startPos, dtVec3 endPos, const dtPolyRefList& path) const;
+
 	/// Miscellaneous Functions
 
 	bool isValidPolyRef(dtPolyRef ref, const dtQueryFilter* filter) const;

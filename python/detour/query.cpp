@@ -8,6 +8,7 @@
 #include "query.h"
 #include "dtmath.h"
 #include "common.h"
+#include "path.h"
 #include <float.h>
 
 using boost::python::override;
@@ -523,5 +524,30 @@ const dtNavMesh* dtNavMeshQueryWraper::getAttachedNavMesh() const
 dtNodePool* dtNavMeshQueryWraper::getNodePool() const
 {
 	return navq_->getNodePool();
+}
+
+dtResult dtNavMeshQueryWraper::smoothPath(dtVec3 startPos, dtVec3 endPos, const dtPolyRefList &path) const
+{
+    dtNavMeshQuery *navMeshQuery = nullptr;
+    float result[MAX_PATH_LENGTH * VERTEX_SIZE];
+    int resultSize = 0;
+
+    const auto status = FindSmoothPath(navq_,
+                                       navq_->getAttachedNavMesh(),
+                                       &startPos.x,
+                                       &endPos.x,
+                                       path.data(),
+                                       path.size(),
+                                       reinterpret_cast<float*>(result),
+                                       &resultSize,
+                                       sizeof(result) / sizeof(result[0]));
+
+    std::vector<dtVec3> resultPath(resultSize);
+    for (int i = 0; i < resultSize; ++i)
+        dtVcopy(&resultPath[i].x, &result[i * VERTEX_SIZE]);
+
+    dict out;
+    out["path"] = resultPath;
+    return dtResult(status, out);
 }
 

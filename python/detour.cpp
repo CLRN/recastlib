@@ -92,6 +92,7 @@ void export_detour()
 		.def("isValidPolyRef", &dtNavMeshQueryWraper::isValidPolyRef)
 		.def("isInClosedList", &dtNavMeshQueryWraper::isInClosedList)
 		.def("getAttachedNavMesh", &dtNavMeshQueryWraper::getAttachedNavMesh, return_internal_reference<>())
+		.def("smoothPath", &dtNavMeshQueryWraper::smoothPath)
 		//.def("getNodePool", &dtNavMeshQueryWraper::getNodePool, return_internal_reference<>())
 	;
 

@@ -31,7 +31,8 @@ add_library (_recast SHARED
     ${PROJECT_SOURCE_DIR}/python/export.cpp
     ${PROJECT_SOURCE_DIR}/python/assert.cpp
     ${PROJECT_SOURCE_DIR}/python/mmap.cpp
-    ${PROJECT_SOURCE_DIR}/python/mmap_export.cpp)
+    ${PROJECT_SOURCE_DIR}/python/mmap_export.cpp
+    ${PROJECT_SOURCE_DIR}/python/path.cpp)
 
 target_link_libraries(_recast ${Python_LIBRARY} Boost::python3 Boost::filesystem)
 
